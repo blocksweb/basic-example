@@ -1,14 +1,13 @@
-import { IBlockswebComponent } from "@blocksweb/core-local/src";
+import { IBlockswebComponent } from "@blocksweb/core/dist/rsc/__types__";
 
 type ProductListerProps = {
   children?: React.ReactNode;
-  LeftComponent?: React.ReactElement;
+  LeftComponent?: IBlockswebComponent;
   background: string;
 };
 
 // Define the ProductLister component with inline mocked products including real names and images
 const LayoutComponent: IBlockswebComponent = ({
-  children,
   LeftComponent,
   background,
 }: ProductListerProps) => {
@@ -26,7 +25,6 @@ const LayoutComponent: IBlockswebComponent = ({
     );
   return (
     <div className="">
-      {/* @ts-ignore */}
       <LeftComponent />
     </div>
   );
@@ -34,8 +32,7 @@ const LayoutComponent: IBlockswebComponent = ({
 
 LayoutComponent.schema = {
   displayName: "LayoutComponent",
-  droppable: true,
-  editable: true,
+
   options: [
     {
       type: "component",

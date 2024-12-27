@@ -1,4 +1,4 @@
-import { IBlockswebComponent } from "@blocksweb/core-local/src";
+import { IBlockswebComponent } from "@blocksweb/core/dist/rsc/__types__";
 
 const HeaderComponent: IBlockswebComponent = () => {
   return (
@@ -127,8 +127,6 @@ const HeaderComponent: IBlockswebComponent = () => {
 
 HeaderComponent.schema = {
   displayName: "HeaderComponent",
-  droppable: true,
-  editable: true,
   options: [],
 };
 

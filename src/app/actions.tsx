@@ -1,7 +1,7 @@
 "use server";
 
 export const getComponents = async () => {
-  const result = new Promise((resolve, reject) => {
+  const result = new Promise((resolve) => {
     setTimeout(() => {
       resolve(<div>Kip en ei2!</div>);
     }, 5000);

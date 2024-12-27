@@ -1,9 +1,9 @@
 "use client";
-import { IBlockswebComponent, Text } from "@blocksweb/core-local/src";
+import { IBlockswebComponent } from "@blocksweb/core/dist/rsc";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
-const TestComponent: IBlockswebComponent = (props: any) => {
+const TestComponent: IBlockswebComponent = () => {
   const [counter, setCounter] = useState<number>(0);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,11 +16,7 @@ const TestComponent: IBlockswebComponent = (props: any) => {
       <Head>
         <title>This is dynamic</title>
       </Head>
-      <Text
-        style={{ color: "red", fontSize: "20px" }}
-        defaultText={"Hello World"}
-        propName={"thispropdoesnotexist"}
-      />
+
       {counter}
     </div>
   );

@@ -1,5 +1,6 @@
-import type { IBlockswebComponent } from "@blocksweb/core-local/src";
-const InnerComponent: IBlockswebComponent = (props: { image }) => {
+import { IBlockswebComponent } from "@blocksweb/core/dist/rsc/__types__";
+
+const InnerComponent: IBlockswebComponent = () => {
   return (
     <div
       style={{

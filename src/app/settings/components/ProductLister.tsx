@@ -1,4 +1,4 @@
-import { IBlockswebComponent } from "@blocksweb/core-local/src";
+import { IBlockswebComponent } from "@blocksweb/core/dist/rsc/__types__";
 
 // Define the type for a single product, including an image URL
 type Product = {

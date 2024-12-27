@@ -1,4 +1,4 @@
-import { IBlockswebComponent } from "@blocksweb/core-local/src";
+import { IBlockswebComponent } from "@blocksweb/core/dist/rsc/__types__";
 
 const Footer: IBlockswebComponent = () => {
   return (

@@ -1,63 +1,9 @@
-import { IBlockswebComponent, Text, Image } from "@blocksweb/core-local/src";
+import { IBlockswebComponent } from "@blocksweb/core/dist/rsc/__types__";
 
 type HeroSectionProps = {
   customerAmount: number;
   subtitle: string;
   backgroundImage: string;
-};
-
-const Element = ({ attributes, children, element, propName }) => {
-  const style = { textAlign: element.align, fontFamily: element.fontFamily };
-  switch (element.type) {
-    case "block-quote":
-      return (
-        <blockquote style={style} {...attributes} bw-option-name={propName}>
-          {children}
-        </blockquote>
-      );
-    case "bulleted-list":
-      return (
-        <ul style={style} {...attributes} bw-option-name={propName}>
-          {children}
-        </ul>
-      );
-    case "heading-one":
-      return (
-        <h1
-          style={{
-            fontSize: "3.75rem",
-          }}
-          {...attributes}
-          bw-option-name={propName}
-        >
-          {children}
-        </h1>
-      );
-    case "heading-two":
-      return (
-        <h2 style={style} {...attributes} bw-option-name={propName}>
-          {children}
-        </h2>
-      );
-    case "list-item":
-      return (
-        <li style={style} {...attributes} bw-option-name={propName}>
-          {children}
-        </li>
-      );
-    case "numbered-list":
-      return (
-        <ol style={style} {...attributes} bw-option-name={propName}>
-          {children}
-        </ol>
-      );
-    default:
-      return (
-        <p style={style} {...attributes} bw-option-name={propName}>
-          {children}
-        </p>
-      );
-  }
 };
 
 const HeroSection: IBlockswebComponent = (props: HeroSectionProps) => {
@@ -75,22 +21,7 @@ const HeroSection: IBlockswebComponent = (props: HeroSectionProps) => {
           </h1>
         </div>
 
-        <div className="mt-5 max-w-3xl text-center mx-auto">
-          <Text
-            key={0}
-            text={props.subtitle}
-            className="text-lg text-gray-600 dark:text-neutral-400"
-            propName="subtitle"
-            component="h1"
-            element={(props) => <Element {...props} />}
-          />
-          <Image
-            propName={"backgroundImage"}
-            asset={props.backgroundImage}
-            default={"https://source.unsplash.com/random"}
-            alt="Hero Image"
-          />
-        </div>
+        <div className="mt-5 max-w-3xl text-center mx-auto"></div>
 
         <div className="mt-8 gap-3 flex justify-center">
           <a
