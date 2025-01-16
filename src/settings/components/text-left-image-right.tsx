@@ -36,7 +36,7 @@ export default function ImageRightTextLeft({
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <h2 className="text-4xl font-bold text-gray-900 leading-tight">
+          <h2 className="text-4xl font-bold text-zinc-800 leading-tight">
             {title}
           </h2>
           <p className="text-xl text-gray-600 leading-relaxed">{description}</p>

@@ -18,7 +18,7 @@ const Footer: IBlockswebComponent = () => {
         </div>
 
         <div>
-          <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+          <h4 className="text-xs font-semibold text-zinc-800 uppercase dark:text-neutral-100">
             Product
           </h4>
 
@@ -59,7 +59,7 @@ const Footer: IBlockswebComponent = () => {
         </div>
 
         <div>
-          <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+          <h4 className="text-xs font-semibold text-zinc-800 uppercase dark:text-neutral-100">
             Company
           </h4>
 
@@ -119,7 +119,7 @@ const Footer: IBlockswebComponent = () => {
         </div>
 
         <div>
-          <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+          <h4 className="text-xs font-semibold text-zinc-800 uppercase dark:text-neutral-100">
             Resources
           </h4>
 
@@ -168,7 +168,7 @@ const Footer: IBlockswebComponent = () => {
         </div>
 
         <div>
-          <h4 className="text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+          <h4 className="text-xs font-semibold text-zinc-800 uppercase dark:text-neutral-100">
             Developers
           </h4>
 
@@ -202,7 +202,7 @@ const Footer: IBlockswebComponent = () => {
             </p>
           </div>
 
-          <h4 className="mt-7 text-xs font-semibold text-gray-900 uppercase dark:text-neutral-100">
+          <h4 className="mt-7 text-xs font-semibold text-zinc-800 uppercase dark:text-neutral-100">
             Industries
           </h4>
 
