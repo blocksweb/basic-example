@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@blocksweb/core": "1.0.3-rc3",
+    "@blocksweb/core": "^1.0.11-alpha.5",
     "framer-motion": "^11.11.8",
     "lucide-react": "^0.469.0",
     "next": "14.2.15",
