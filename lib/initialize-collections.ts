@@ -11,11 +11,8 @@ let isInitialized = false;
 
 export function initializeCollections(queryClient: QueryClient) {
   if (isInitialized) {
-    console.log("ℹ️ Collections already initialized");
     return;
   }
-
-  console.log("🔄 Initializing BlocksWeb collections...");
 
   // Initialize cache manager
   initializeCacheManager(queryClient);
@@ -23,10 +20,6 @@ export function initializeCollections(queryClient: QueryClient) {
   // Import collections from registry to check what's available
   import("@blocksweb/core/server").then(({ collectionRegistry }) => {
     const availableCollections = collectionRegistry.getNames();
-    console.log(
-      "✅ Collections initialized. Available collections:",
-      availableCollections
-    );
   });
 
   isInitialized = true;
