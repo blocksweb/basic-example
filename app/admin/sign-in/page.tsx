@@ -1,13 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { useAuth } from "@blocksweb/core/editor";
 import HydrationBoundary from "@/components/hydration-boundary";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-// Define all styles to avoid any globals.css dependency
+// Define all styles
 const styles = {
   fontFamily: {
     fontFamily:
@@ -19,7 +16,7 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     padding: "48px 16px",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f9fafb",
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
   },
@@ -33,19 +30,28 @@ const styles = {
     border: "1px solid #e5e7eb",
   },
   cardHeader: {
-    padding: "1.5rem 1.5rem 0 1.5rem",
+    padding: "2rem 1.5rem 1rem 1.5rem",
+    textAlign: "center" as const,
+  },
+  iconContainer: {
+    width: "4rem",
+    height: "4rem",
+    margin: "0 auto 1rem auto",
+    backgroundColor: "#eff6ff",
+    borderRadius: "9999px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   cardTitle: {
-    fontSize: "1.5rem",
+    fontSize: "1.875rem",
     fontWeight: "bold",
-    textAlign: "center",
     color: "#111827",
     margin: "0 0 0.5rem 0",
     fontFamily: "inherit",
   },
   cardDescription: {
-    textAlign: "center",
-    fontSize: "0.875rem",
+    fontSize: "1rem",
     color: "#6B7280",
     margin: "0.5rem 0 0 0",
     fontFamily: "inherit",
@@ -53,306 +59,231 @@ const styles = {
   cardContent: {
     padding: "1.5rem",
   },
-  flexColumn: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "1rem",
-  },
-  buttonIcon: {
-    marginRight: "0.5rem",
-    height: "1rem",
-    width: "1rem",
-  },
-  fullWidth: {
-    width: "100%",
-  },
-  buttonOutline: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
+  infoBox: {
+    backgroundColor: "#f0f9ff",
+    border: "1px solid #bfdbfe",
     borderRadius: "0.375rem",
+    padding: "1rem",
+    marginBottom: "1.5rem",
+  },
+  infoText: {
     fontSize: "0.875rem",
-    fontWeight: "500",
-    padding: "0.5rem 1rem",
-    backgroundColor: "transparent",
-    border: "1px solid #e5e7eb",
-    color: "#374151",
-    cursor: "pointer",
-    width: "100%",
+    color: "#1e40af",
+    margin: 0,
     fontFamily: "inherit",
+    lineHeight: "1.5",
   },
   button: {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "0.375rem",
-    fontSize: "0.875rem",
-    fontWeight: "500",
-    padding: "0.5rem 1rem",
-    backgroundColor: "#2563eb", // blue-600
+    fontSize: "1rem",
+    fontWeight: "600",
+    padding: "0.75rem 1.5rem",
+    backgroundColor: "#2563eb",
     color: "#ffffff",
     border: "none",
     cursor: "pointer",
     width: "100%",
-    height: "2.5rem",
+    height: "3rem",
     fontFamily: "inherit",
+    transition: "background-color 0.2s",
   },
-  buttonDisabled: {
-    opacity: "0.5",
-    cursor: "not-allowed",
-  },
-  dividerContainer: {
-    position: "relative",
-    marginTop: "1rem",
-    marginBottom: "1rem",
-  },
-  dividerLine: {
-    position: "absolute",
-    inset: "0",
-    display: "flex",
-    alignItems: "center",
-  },
-  separator: {
-    width: "100%",
-    height: "1px",
-    backgroundColor: "#e5e7eb",
-  },
-  dividerText: {
-    position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    fontSize: "0.75rem",
-    textTransform: "uppercase",
-  },
-  dividerSpan: {
-    backgroundColor: "#ffffff",
-    padding: "0 0.5rem",
-    color: "#6B7280",
-  },
-  formLabel: {
-    display: "block",
-    fontSize: "0.875rem",
-    fontWeight: "500",
-    marginBottom: "0.25rem",
-    color: "#374151",
-    fontFamily: "inherit",
-  },
-  formInput: {
-    display: "block",
-    width: "100%",
-    borderRadius: "0.375rem",
-    border: "1px solid #e5e7eb",
-
-    fontSize: "0.875rem",
-    lineHeight: "1.25rem",
-    color: "#111827",
-    backgroundColor: "#ffffff",
-    fontFamily: "inherit",
-  },
-  formContainer: {
-    padding: "0.5rem 0.75rem",
-  },
-
-  formErrorMessage: {
-    fontSize: "0.75rem",
-    color: "#ef4444",
-    marginTop: "0.25rem",
-    fontFamily: "inherit",
+  buttonHover: {
+    backgroundColor: "#1d4ed8",
   },
   cardFooter: {
-    padding: "0 1.5rem 1.5rem 1.5rem",
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.5rem",
+    padding: "0 1.5rem 2rem 1.5rem",
   },
   textCenter: {
-    textAlign: "center",
+    textAlign: "center" as const,
     fontSize: "0.875rem",
-    color: "#374151",
+    color: "#6B7280",
     margin: 0,
     fontFamily: "inherit",
   },
   link: {
-    color: "#2563eb", // blue-600
+    color: "#2563eb",
     textDecoration: "underline",
     textUnderlineOffset: "4px",
     fontFamily: "inherit",
   },
 } as const;
 
-const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
-});
-
 export default function LoginPage() {
-  const { authenticate } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  // Helper function to get redirect_uri from URL (fallback method)
+  const getRedirectUriFromUrl = () => {
+    if (typeof window === "undefined") return null;
 
-  async function onSubmit(values: z.infer<typeof loginSchema>) {
-    setIsLoading(true);
+    // Method 1: Try URLSearchParams directly
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromUrlParams = urlParams.get("redirect_uri");
 
-    // This would normally call your authentication API
-    authenticate(values.email, values.password).then((response) => {
-      if (response) {
-        window.location.href = "/admin/cms/editor";
-      } else {
-        // Handle authentication error
-        setIsLoading(false);
-      }
-    });
-  }
+    console.log("🔍 [Sign In Page] URLSearchParams method:", fromUrlParams);
 
-  const onGoogleSignIn = () => {
-    window.location.href = `https://api.blocksweb.nl/google/redirect?redirect_uri=${
-      process.env.NEXT_PUBLIC_APP_URL ?? process.env.BLOCKSWEB_API_URL
-    }/admin/check`;
+    // Method 2: Parse manually as backup
+    const search = window.location.search;
+    const match = search.match(/redirect_uri=([^&]*)/);
+    const fromManual = match ? decodeURIComponent(match[1]) : null;
+
+    console.log("🔍 [Sign In Page] Manual parse method:", fromManual);
+
+    return fromUrlParams || fromManual;
   };
+
+  // Debug: Log on component mount
+  useEffect(() => {
+    const redirectUriFromHook = searchParams?.get("redirect_uri");
+    const redirectUriFromUrl = getRedirectUriFromUrl();
+
+    console.log("====================================");
+    console.log("🔍 [Sign In Page] MOUNTED");
+    console.log("🔍 [Sign In Page] Full URL:", window.location.href);
+    console.log(
+      "🔍 [Sign In Page] window.location.origin:",
+      window.location.origin
+    );
+    console.log(
+      "🔍 [Sign In Page] window.location.pathname:",
+      window.location.pathname
+    );
+    console.log(
+      "🔍 [Sign In Page] window.location.search:",
+      window.location.search
+    );
+    console.log(
+      "🔍 [Sign In Page] window.location.hash:",
+      window.location.hash
+    );
+    console.log(
+      "🔍 [Sign In Page] useSearchParams() result:",
+      redirectUriFromHook
+    );
+    console.log(
+      "🔍 [Sign In Page] Direct URL parsing result:",
+      redirectUriFromUrl
+    );
+
+    // Check sessionStorage for debugging
+    const lastFrom = sessionStorage.getItem("last_redirect_from");
+    const lastUri = sessionStorage.getItem("last_redirect_uri");
+    const lastTime = sessionStorage.getItem("last_redirect_time");
+
+    console.log(
+      "🔍 [Sign In Page] SessionStorage - last_redirect_from:",
+      lastFrom
+    );
+    console.log(
+      "🔍 [Sign In Page] SessionStorage - last_redirect_uri:",
+      lastUri
+    );
+    console.log(
+      "🔍 [Sign In Page] SessionStorage - last_redirect_time:",
+      lastTime
+    );
+    console.log("====================================");
+  }, [searchParams]);
+
+  const handleSignIn = () => {
+    // Get the API URL and current app URL
+    const apiUrl =
+      process.env.NEXT_PUBLIC_API_URL || "https://cloud.blocksweb.nl";
+    const appUrl = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
+
+    // Try multiple methods to get redirect_uri
+    const redirectUriFromHook = searchParams?.get("redirect_uri");
+    const redirectUriFromUrl = getRedirectUriFromUrl();
+    const redirectUri = redirectUriFromHook || redirectUriFromUrl;
+
+    console.log("🔍 [Sign In Page] Clicking Continue");
+    console.log(
+      "🔍 [Sign In Page] redirectUri from hook:",
+      redirectUriFromHook
+    );
+    console.log("🔍 [Sign In Page] redirectUri from URL:", redirectUriFromUrl);
+    console.log("🔍 [Sign In Page] Final redirectUri:", redirectUri);
+
+    // Use provided redirect_uri or default to editor
+    const finalRedirectUri = redirectUri || `${appUrl}/admin/cms/editor`;
+
+    console.log("🔍 [Sign In Page] finalRedirectUri:", finalRedirectUri);
+
+    const targetUrl = `${apiUrl}/login?redirect_uri=${encodeURIComponent(
+      finalRedirectUri
+    )}`;
+    console.log("🔍 [Sign In Page] Redirecting to:", targetUrl);
+
+    // Redirect to the centralized authentication page
+    // After authentication, user will be redirected back to finalRedirectUri
+    window.location.href = targetUrl;
+  };
+
   return (
     <HydrationBoundary>
       <div style={styles.container}>
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h2 style={styles.cardTitle}>Sign in to your account</h2>
+            <div style={styles.iconContainer}>
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2563eb"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                <polyline points="10 17 15 12 10 7" />
+                <line x1="15" y1="12" x2="3" y2="12" />
+              </svg>
+            </div>
+            <h2 style={styles.cardTitle}>Sign In</h2>
             <p style={styles.cardDescription}>
-              Enter your email below to sign in to your account
+              Sign in to access your Blocksweb workspace
             </p>
           </div>
           <div style={styles.cardContent}>
-            <div style={styles.flexColumn}>
-              <div style={styles.grid}>
-                <button
-                  style={{
-                    ...styles.buttonOutline,
-                    ...(isLoading ? styles.buttonDisabled : {}),
-                  }}
-                  disabled={isLoading}
-                  onClick={() => {}}
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={styles.buttonIcon}
-                  >
-                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                  </svg>
-                  Github
-                </button>
-                <button
-                  style={{
-                    ...styles.buttonOutline,
-                    ...(isLoading ? styles.buttonDisabled : {}),
-                  }}
-                  disabled={isLoading}
-                  onClick={onGoogleSignIn}
-                >
-                  <svg
-                    style={styles.buttonIcon}
-                    aria-hidden="true"
-                    focusable="false"
-                    data-prefix="fab"
-                    data-icon="google"
-                    role="img"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 488 512"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
-                    ></path>
-                  </svg>
-                  Google
-                </button>
-              </div>
-
-              <div style={styles.dividerContainer}>
-                <div style={styles.dividerLine}>
-                  <div style={styles.separator}></div>
-                </div>
-                <div style={styles.dividerText}>
-                  <span style={styles.dividerSpan}>Or continue with</span>
-                </div>
-              </div>
-
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                style={styles.flexColumn}
-              >
-                <div style={styles.formContainer}>
-                  <label style={styles.formLabel}>Email</label>
-                  <input
-                    style={styles.formInput}
-                    placeholder="name@example.com"
-                    {...form.register("email")}
-                  />
-                  {form.formState.errors.email && (
-                    <p style={styles.formErrorMessage}>
-                      {form.formState.errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div style={styles.formContainer}>
-                  <label style={styles.formLabel}>Password</label>
-                  <input
-                    style={styles.formInput}
-                    type="password"
-                    placeholder="••••••••"
-                    {...form.register("password")}
-                  />
-                  {form.formState.errors.password && (
-                    <p style={styles.formErrorMessage}>
-                      {form.formState.errors.password.message}
-                    </p>
-                  )}
-                </div>
-
-                <button
-                  type="submit"
-                  style={{
-                    ...styles.button,
-                    ...(isLoading ? styles.buttonDisabled : {}),
-                  }}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Signing in..." : "Sign in"}
-                </button>
-              </form>
+            <div style={styles.infoBox}>
+              <p style={styles.infoText}>
+                You'll be redirected to our secure authentication service to
+                sign in. After signing in, you'll be automatically brought back
+                to continue.
+              </p>
             </div>
+
+            <button
+              style={styles.button}
+              onClick={handleSignIn}
+              onMouseEnter={(e) => {
+                (e.target as HTMLButtonElement).style.backgroundColor =
+                  styles.buttonHover.backgroundColor;
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.backgroundColor =
+                  styles.button.backgroundColor;
+              }}
+            >
+              Continue to Sign In
+            </button>
           </div>
           <div style={styles.cardFooter}>
-            <div style={styles.textCenter}>
-              <a href="/auth/reset-password" style={styles.link}>
-                Forgot your password?
+            <p style={styles.textCenter}>
+              Don't have an account?{" "}
+              <a
+                href={`${
+                  process.env.NEXT_PUBLIC_API_URL ||
+                  "https://cloud.blocksweb.nl"
+                }/register`}
+                style={styles.link}
+              >
+                Create one
               </a>
-            </div>
-            <div style={styles.textCenter}>
-              Don&apos;t have an account?{" "}
-              <a href="/auth/register" style={styles.link}>
-                Sign up
-              </a>
-            </div>
+            </p>
           </div>
         </div>
       </div>
