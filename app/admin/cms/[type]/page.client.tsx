@@ -7,6 +7,7 @@ import {
 } from "@blocksweb/core/editor";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Suspense, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type PageClientProps = {
   workspace: IWorkspace;
@@ -21,6 +22,8 @@ const queryClient = new QueryClient({
 });
 
 const PageClient = (props: PageClientProps) => {
+const router = useRouter();
+const searchParams = useSearchParams();
 
 useEffect(() => {
     // Check for OAuth token in URL parameters
