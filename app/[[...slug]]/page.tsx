@@ -1,4 +1,4 @@
-import { getServerPage, BlocksWebPageServer } from "@blocksweb/core/server";
+import { getServerPage, BlockswebPageServer } from "@blocksweb/core/server";
 
 import { settings } from "@/blocksweb.config";
 import { componentSchemas } from "@/settings/schema-registry";
@@ -46,7 +46,7 @@ export default async function Home({ params }: HomeProps) {
     // Use BlocksWebPageServer for full server-side rendering with resolved collection data
     return (
       <PageWrapper>
-        <BlocksWebPageServer
+        <BlockswebPageServer
           page={blockswebPage}
           settings={settings}
           schemaRegistry={componentSchemas}
